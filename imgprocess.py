@@ -5,7 +5,7 @@ import numpy as np
 import time
 import colorsys
 
-lambdaC = 600 #central wavelength
+lambdaC = 450 #central wavelength
 
 def imgProcess_4img():
 
@@ -44,7 +44,7 @@ def imgProcess_4img():
     im3.close()
     im4.close()
 
-    phase2img(height, width, phaseVals)
+    array2img(height, width, phaseVals, arrayVals)
 
 def imgProcess_7img():
 
@@ -92,21 +92,31 @@ def imgProcess_7img():
     im6.close()
     im7.close()
 
-    phase2img(height, width, phaseVals)
+    array2img(height, width, phaseVals, arrayVals)
 
-def phase2img(height, width, phaseArry):
+def array2img(height, width, phaseArry, arrayVals):
 
-    phaseArry = phaseArry + (np.pi/2)
+    phaseArry = phaseArry + abs(phaseArry.min())
     phaseArry = phaseArry * (255 / np.pi)
     for y in range(height):
         for x in range(width):
             phaseArry[y,x] = int(round(phaseArry[y,x]))
     im = Image.fromarray(phaseArry)
     im = im.convert("RGB")
-
-    #im = im.filter(ImageFilter.GaussianBlur(2)) #image low pass filter with radius
-    im.save("out.png")
+    im.save("phase.png")
     im.close()
+
+    arrayVals = arrayVals + abs(arrayVals.min())
+    max_factor = (lambdaC * (np.pi/2)) / (4 * np.pi)
+    arrayVals = arrayVals * (255 / max_factor)
+    for y in range(height):
+        for x in range(width):
+            arrayVals[y,x] = int(round(arrayVals[y,x]))
+    im = Image.fromarray(arrayVals)
+    im = im.convert("RGB")
+    im.save("RH.png")
+    im.close()
+    
 
 
 if __name__ == '__main__':
