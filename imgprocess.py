@@ -5,7 +5,22 @@ import numpy as np
 import time
 import colorsys
 
+
+
 lambdaC = 450 #central wavelength
+n_index = 1 #refractive index (if in medium)
+
+
+
+if __name__ == '__main__':
+    startTime = time.time()
+    #put hashtag on which function not using
+    #imgProcess_4img()
+    imgProcess_7img()
+
+    print("Done in:", time.time() - startTime, "Seconds")
+
+
 
 def imgProcess_4img():
 
@@ -36,7 +51,7 @@ def imgProcess_4img():
                     theta = -1 * (np.pi / 2)
             phaseVals[y,x] = theta
             OH = (lambdaC * theta) / (4 * np.pi)
-            RH = OH
+            RH = OH / n_index
             arrayVals[y,x] = RH
 
     im1.close()
@@ -81,7 +96,7 @@ def imgProcess_7img():
                     theta = -1 * (np.pi / 2)
             phaseVals[y,x] = theta
             OH = (lambdaC * theta) / (4 * np.pi)
-            RH = OH
+            RH = OH / n_index
             arrayVals[y,x] = RH
 
     im1.close()
@@ -116,12 +131,3 @@ def array2img(height, width, phaseArry, arrayVals):
     im = im.convert("RGB")
     im.save("RH.png")
     im.close()
-    
-
-
-if __name__ == '__main__':
-    startTime = time.time()
-
-    imgProcess_7img()
-
-    print("Done in:", time.time() - startTime, "Seconds")
